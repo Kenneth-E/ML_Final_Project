@@ -13,6 +13,8 @@ Final project for Machine Learning class. Language detection model using Adaboos
 - Portugese
 - Swedish
 - Cebuano
+- Latvian
+- Czech
 
 # Sample Paragraphs:
 
@@ -37,3 +39,7 @@ Portugese: Tinha a mão fechada em punho, com as chaves a saírem entre os dedos
 Swedish: Hennes hand slogs in i en knytnäve med nycklarna som stack ut mellan fingrarna. Det här var vapnet hennes pappa hade visat henne hur man tillverkar när hon gick ensam till sin bil efter jobbet. Hon önskade att hon hade något lite mer potent än nycklar mellan fingrarna. Det hade varit trevligt med lite muskulatur eller pepparspray. Han hade tänkt köpa några men hade aldrig kommit till skott. När björnmamman tog ytterligare ett steg framåt med sina ungar i släptåg visste hon att hennes knytnäve med nycklar inte skulle vara ett adekvat försvar för denna situation.
 
 Cebuano: Ang iyang kamot gikumo sa iyang mga yawe nga migawas gikan sa taliwala sa iyang mga tudlo. Mao kini ang armas nga gipakita kaniya sa iyang amahan kon unsaon paghimo sa dihang siya naglakaw nga nag-inusara paingon sa iyang sakyanan human sa trabaho. Nanghinaut siya nga aduna siyay butang nga mas kusgan kay sa mga yawe taliwala sa iyang mga tudlo. Maayo unta nga naay mace o pepper spray. Nagtinguha siya nga mopalit ug pipila apan wala pa gyud makaabut niini. Samtang ang inahan nga oso mihimo og laing lakang sa unahan uban sa iyang mga nati nga giguyod, nahibal-an niya nga ang iyang kumo nga adunay mga yawe dili mahimong igong depensa alang niini nga sitwasyon.
+
+Latvian: Viņas roka bija savilkta plaukstā, un atslēgas bija izvirzītas starp pirkstiem. Tas bija ierocis, ko tēvs viņai bija parādījis, kā to darīt, kad viņa pēc darba viena pati gāja uz savu mašīnu. Viņa vēlējās, lai starp pirkstiem būtu kaut kas spēcīgāks par atslēgām. Būtu bijis jauki, ja viņai būtu bijusi kāda buķete vai piparu aerosols. Viņš bija domājis kaut ko iegādāties, bet tā arī nebija paguvis to izdarīt. Kad lāču māte ar saviem mazuļiem priekšgalā spērusi vēl vienu soli uz priekšu, viņa zināja, ka viņas dūris ar atslēgām nebūs adekvāta aizsardzība šajā situācijā.
+
+Czech: Ruku měla sevřenou v pěst a mezi prsty jí trčely klíče. Tuto zbraň jí ukázal její otec, když šla po práci sama k autu. Přála si, aby měla mezi prsty něco silnějšího než klíče. Bylo by hezké mít nějaký pepřový sprej nebo pepřovku. Chtěl si něco koupit, ale nikdy se k tomu nedostal. Když medvědí matka udělala další krok vpřed s mláďaty v závěsu, věděla, že její pěst s klíči nebude pro tuto situaci adekvátní obranou.
