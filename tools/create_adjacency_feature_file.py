@@ -6,6 +6,8 @@ INPUT_ADJACENCY_FILENAMES = [r"..\src\test_adjacency.csv"]
 OUTPUT_FEATURE_FILENAME = [r"..\src\test_adjacency_features.csv"]
 '''
 
+# WARNING: deprecated, do not use
+
 NUM_FILES = 3
 INPUT_ADJACENCY_FILENAMES = [r"..\src\test_adjacency.csv", r"..\src\keyboard_mash_adjacency.csv", r"..\src\random_adjacency.csv"]
 OUTPUT_FEATURE_FILENAME = [r"..\src\test_adjacency_features.csv", r"..\src\keyboard_mash_adjacency_features.csv", r"..\src\random_features.csv"]
