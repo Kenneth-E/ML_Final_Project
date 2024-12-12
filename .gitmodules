@@ -1,0 +1,3 @@
+[submodule "lib/DecisionTreeID3"]
+	path = lib/DecisionTreeID3
+	url = https://github.com/tiepvupsu/DecisionTreeID3.git
