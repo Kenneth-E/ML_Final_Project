@@ -1,10 +1,17 @@
 import csv
 import pandas as pd
 
-INPUT_FILES = [r"..\src\test_adjacency_features.csv", r"..\src\test_adjacency_features_2.csv"]
-LABELS = ["test1", "test2"]
+INPUT_FILES = [r"..\src\keyboard_mash_adjacency_features.csv", r"..\src\random_features.csv"]
+LABELS = ["keyboard_mash", "random"]
 OUTPUT_FILE = r"..\src\combined_features.csv"
 START_INDEX = 1
+
+'''
+INPUT_FILES = [r"..\src\test_adjacency_features.csv", r"..\src\test_adjacency_features_2.csv"]
+LABELS = ["test1", "test2"]
+OUTPUT_FILE = r"..\src\test_combined_features.csv"
+START_INDEX = 1
+'''
 
 def combine_csvs(input_files, output_file, labels):
     combined_df = pd.DataFrame()
