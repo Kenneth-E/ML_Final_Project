@@ -1,21 +1,42 @@
 import csv
 import numpy as np
+import re
 
-NUM_FILES = 2
-INPUT_SENTENCES_FILENAMES = [r"..\src\keyboard_mash_sentences.txt", r"..\src\random_sentences.txt"]
-OUTPUT_ADJACENCY_FILENAMES = [r"..\src\keyboard_mash_adjacency.csv", r"..\src\random_adjacency.csv"]
+NUM_FILES = 5
+INPUT_SENTENCES_FILENAMES = [
+    r"..\src\keyboard_mash_sentences.txt",
+    r"..\src\random_sentences.txt",
+    r"..\src\books\de_AusDerChronikaEinesFahrendenSchlers.txt",
+    r"..\Bible_texts\ACV.txt",
+    r"..\Bible_texts\CebPinadayag.txt",
+]
+# temporarily use raw book sources until files can be parsed well TODO
+OUTPUT_ADJACENCY_FILENAMES = [
+    r"..\src\keyboard_mash_adjacency.csv",
+    r"..\src\random_adjacency.csv",
+    r"..\src\de_AusDerChronikaEinesFahrendenSchlers.csv",
+    r"..\src\ACV.csv",
+    r"..\src\CebPinadayag.csv",
+]
+BIBLE_REMOVE_NUMBERING_LIST = [
+    False,
+    False,
+    False,
+    True,
+    True
+]
 
 def append_string_to_file(filename, string):
-    with open(filename, "a") as file:
+    with open(filename, "a", encoding="utf-8") as file:
         file.write(string)
 
 def append_csv_row_to_file(filename, list):
-    with open(filename, "a") as file:
+    with open(filename, "a", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(list)
 
 def append_csv_matrix_to_file(filename, matrix):
-    with open(filename, "a") as file:
+    with open(filename, "a", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerows(matrix)
 
@@ -23,18 +44,28 @@ def append_csv_matrix_to_file(filename, matrix):
 for file_idx in range(NUM_FILES):
     INPUT_FILENAME = INPUT_SENTENCES_FILENAMES[file_idx]
     OUTPUT_FILENAME = OUTPUT_ADJACENCY_FILENAMES[file_idx]
+    BIBLE_REMOVE_NUMBERING = BIBLE_REMOVE_NUMBERING_LIST[file_idx]
 
     # clear output file
-    with open(OUTPUT_FILENAME, "w") as output_file:
+    with open(OUTPUT_FILENAME, "w", encoding="utf-8") as output_file:
         pass
 
     letter_pair_dict = dict()
     adjacency_matrix = []
 
-    with open(INPUT_FILENAME, "r") as words_file:
+    skipped_lines = 0
+
+    with open(INPUT_FILENAME, "r", encoding="utf-8") as words_file:
         for line_idx, line in enumerate(words_file):
             # line = words_file.readline()
             sentence = line.strip()
+            # skip blank sentences
+            if sentence == "":
+                skipped_lines += 1
+                continue
+            # remove beginning brackets, ex. "[1:1] In the beginning" -> "In the beginning" with simple regex
+            if BIBLE_REMOVE_NUMBERING:
+                sentence = re.sub(r'^\[.*?\]\s*', '', sentence)
             sample_adjacency_list = np.array([])
             num_letter_adjacencies = len(sentence) - 1
             for idx in range(len(sentence) - 1):
@@ -53,6 +84,10 @@ for file_idx in range(NUM_FILES):
                     sample_adjacency_list = np.pad(sample_adjacency_list, (0, len(letter_pair_dict) - len(sample_adjacency_list)), constant_values=(0,0))
                 sample_adjacency_list[letter_pair_idx] += 1 / num_letter_adjacencies
             adjacency_matrix.append(sample_adjacency_list)
+
+    print(f"skipped_lines: {skipped_lines}")
+    print(f"INPUT_FILENAME: {INPUT_FILENAME}")
+    print(f"---------")
     '''
     with open(INPUT_FILENAME, "r") as words_file:
         for line_idx, line in enumerate(words_file):

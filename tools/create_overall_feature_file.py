@@ -1,10 +1,22 @@
 import csv
 import pandas as pd
 
-INPUT_FILES = [r"..\src\keyboard_mash_adjacency_features.csv", r"..\src\random_features.csv"]
-LABELS = ["keyboard_mash", "random"]
+INPUT_FILES = [
+    r"..\src\keyboard_mash_adjacency_features.csv",
+    r"..\src\random_features.csv",
+    r"..\src\de_AusDerChronikaEinesFahrendenSchlers.csv",
+    r"..\src\ACV.csv",
+    r"..\src\CebPinadayag.csv",
+]
+LABELS = [
+    "keyboard_mash",
+    "random",
+    "german",
+    "english",
+    "cebuano"
+]
 OUTPUT_FILE = r"..\src\combined_features.csv"
-START_INDEX = 1
+START_INDEX = 0
 
 '''
 INPUT_FILES = [r"..\src\test_adjacency_features.csv", r"..\src\test_adjacency_features_2.csv"]
