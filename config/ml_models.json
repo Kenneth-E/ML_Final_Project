@@ -1,0 +1,13 @@
+[
+  {
+    "use_adaboost": false,
+    "use_pca": false,
+    "model_arguments": {
+      "test_slice_start": 0,
+      "test_slice_end": 100,
+      "train_slice_start": 100,
+      "train_slice_end": 20000,
+      "max_depth": 10
+    }
+  }
+]
