@@ -3,10 +3,10 @@ import pandas as pd
 from sklearn import tree
 import matplotlib.pyplot as plt
 
-TEST_IDS = [slice(0, 100)]
-TRAIN_IDS = [slice(100, 20000)]
-MAX_DEPTH = [20]
-NUM_TRIALS = 1
+TEST_IDS = [slice(0, 100), slice(0, 100), slice(0, 100), slice(0, 100)]
+TRAIN_IDS = [slice(100, 20000), slice(100, 20000), slice(100, 20000), slice(100, 20000)]
+MAX_DEPTH = [5, 10, 20, 40]
+NUM_TRIALS = 4
 
 def id3_only(test_id_slice, train_id_slice, max_depth, trial_num):
     if not isinstance(test_id_slice, slice):
