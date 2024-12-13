@@ -3,8 +3,6 @@ import pandas as pd
 from sklearn import tree
 import matplotlib.pyplot as plt
 
-from lib.JHU_CS475.homework1.id3 import TreeBase, TreeNode, DecisionTree, evaluate
-
 TEST_IDS = [slice(0, 100)]
 TRAIN_IDS = [slice(100, 20000)]
 MAX_DEPTH = [20]
@@ -85,41 +83,3 @@ def id3_only(test_id_slice, train_id_slice, max_depth, trial_num):
 if __name__ == "__main__":
     for trial_idx in range(NUM_TRIALS):
         id3_only(TEST_IDS[trial_idx], TRAIN_IDS[trial_idx], MAX_DEPTH[trial_idx], trial_idx)
-
-'''    
-    dataset = pd.read_csv('../src/combined_features.csv', index_col = 0, parse_dates = True)
-    print(dataset)
-
-    dt = DecisionTree(dataset, 'label', 5)
-    data_test1 = dataset.iloc[:6]
-    print(data_test1)
-    assert np.isclose(dt.entropy(data_test1), 1.0)  # Test entropy implementation
-    dt.fit()  # Test build the tree and make sure there is no error
-
-    print('----------')
-    dt.print_tree()  # Print the tree
-    print('----------')
-
-    sample = dataset.iloc[:12]
-    print(sample)
-    print('----------')
-    print('prediction:', dt.predict(sample))  # Test predict function
-'''
-
-
-'''
-from lib.DecisionTreeID3.id3 import DecisionTreeID3
-
-# NOTE: this gives anomalous results, to be updated
-
-if __name__ == "__main__":
-    df = pd.read_csv('../src/combined_features.csv', index_col = 0, parse_dates = True)
-    X = df.iloc[:, :-1]
-    y = df.iloc[:, -1]
-    tree = DecisionTreeID3(max_depth = 3, min_samples_split = 2)
-    tree.fit(X, y)
-    predictions = tree.predict(X)
-    print(f"Predictions:     {predictions}")
-    print(f"Actual Labels:   {list(y)}")
-    print(f"Input: \n{X}")
-'''
