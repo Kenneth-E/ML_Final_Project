@@ -4,19 +4,19 @@ import re
 
 NUM_FILES = 5
 INPUT_SENTENCES_FILENAMES = [
-    r"..\src\keyboard_mash_sentences.txt",
-    r"..\src\random_sentences.txt",
-    r"..\src\books\de_AusDerChronikaEinesFahrendenSchlers.txt",
-    r"..\Bible_texts\ACV.txt",
-    r"..\Bible_texts\CebPinadayag.txt",
+    r"..\data\utterances\keyboard_mash_sentences.txt",
+    r"..\data\utterances\random_sentences.txt",
+    r"..\data\raw\books\de_AusDerChronikaEinesFahrendenSchlers.txt",
+    r"..\data\raw\Bible_texts\ACV.txt",
+    r"..\data\raw\Bible_texts\CebPinadayag.txt",
 ]
 # temporarily use raw book sources until files can be parsed well TODO
 OUTPUT_ADJACENCY_FILENAMES = [
-    r"..\src\keyboard_mash_adjacency.csv",
-    r"..\src\random_adjacency.csv",
-    r"..\src\de_AusDerChronikaEinesFahrendenSchlers.csv",
-    r"..\src\ACV.csv",
-    r"..\src\CebPinadayag.csv",
+    r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
+    r"..\data\adjacency_matrices\random_adjacency.csv",
+    r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
+    r"..\data\adjacency_matrices\ACV.csv",
+    r"..\data\adjacency_matrices\CebPinadayag.csv",
 ]
 BIBLE_REMOVE_NUMBERING_LIST = [
     False,
@@ -59,7 +59,7 @@ for file_idx in range(NUM_FILES):
         for line_idx, line in enumerate(words_file):
             # line = words_file.readline()
             sentence = line.strip()
-            # skip blank sentences
+            # skip blank utterances
             if sentence == "":
                 skipped_lines += 1
                 continue
@@ -88,7 +88,7 @@ for file_idx in range(NUM_FILES):
     print(f"skipped_lines: {skipped_lines}")
     print(f"INPUT_FILENAME: {INPUT_FILENAME}")
     print(f"---------")
-    '''
+    r'''
     with open(INPUT_FILENAME, "r") as words_file:
         for line_idx, line in enumerate(words_file):
             # line = words_file.readline()

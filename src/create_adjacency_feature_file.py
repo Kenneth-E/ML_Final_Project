@@ -1,16 +1,16 @@
 import csv
 import numpy as np
-'''
+r'''
 NUM_FILES = 1
-INPUT_ADJACENCY_FILENAMES = [r"..\src\test_adjacency.csv"]
-OUTPUT_FEATURE_FILENAME = [r"..\src\test_adjacency_features.csv"]
+INPUT_ADJACENCY_FILENAMES = [r"..\data\adjacency_list\test_adjacency.csv"]
+OUTPUT_FEATURE_FILENAME = [r"..\data\adjacency_list\test_adjacency_features.csv"]
 '''
 
 # WARNING: deprecated, do not use
 
 NUM_FILES = 3
-INPUT_ADJACENCY_FILENAMES = [r"..\src\test_adjacency.csv", r"..\src\keyboard_mash_adjacency.csv", r"..\src\random_adjacency.csv"]
-OUTPUT_FEATURE_FILENAME = [r"..\src\test_adjacency_features.csv", r"..\src\keyboard_mash_adjacency_features.csv", r"..\src\random_features.csv"]
+INPUT_ADJACENCY_FILENAMES = [r"..\data\adjacency_list\test_adjacency.csv", r"..\data\adjacency_list\keyboard_mash_adjacency.csv", r"..\data\adjacency_list\random_adjacency.csv"]
+OUTPUT_FEATURE_FILENAME = [r"..\data\features\test_adjacency_features.csv", r"..\data\features\keyboard_mash_adjacency_features.csv", r"..\data\features\random_features.csv"]
 
 letter_pairs_to_feature_id = dict()
 features_outcome_matrix = np.array([])

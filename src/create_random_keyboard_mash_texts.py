@@ -3,8 +3,8 @@ import numpy as np
 NUM_SAMPLES = 10000
 MAX_SENTENCES = 1
 NUM_FILES = 2
-INPUT_WORDS_FILENAMES = [r"..\src\keyboard_mash_words.txt", r"..\src\random_words.txt"]
-OUTPUT_SENTENCES_FILENAMES = [r"..\src\keyboard_mash_sentences.txt", r"..\src\random_sentences.txt"]
+INPUT_WORDS_FILENAMES = [r"..\data\raw\words\keyboard_mash_words.txt", r"..\data\raw\words\random_words.txt"]
+OUTPUT_SENTENCES_FILENAMES = [r"..\data\utterances\keyboard_mash_sentences.txt", r"..\data\utterances\random_sentences.txt"]
 
 def append_string_to_file(filename, string):
     with open(filename, "a") as file:

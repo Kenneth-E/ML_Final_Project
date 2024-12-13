@@ -45,7 +45,7 @@ def ml_model(trial_num, test_id_slice, train_id_slice, max_depth, use_adaboost, 
     else:
         clf = tree.DecisionTreeClassifier(max_depth = max_depth)
 
-    dataset = pd.read_csv('../src/combined_features.csv', index_col = 0, parse_dates = True)
+    dataset = pd.read_csv('../data/combined_features/combined_features.csv', index_col = 0, parse_dates = True)
     print("dataset:")
     print(dataset)
     print("--------")

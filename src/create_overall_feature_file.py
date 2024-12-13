@@ -2,11 +2,11 @@ import csv
 import pandas as pd
 
 INPUT_FILES = [
-    r"..\src\keyboard_mash_adjacency_features.csv",
-    r"..\src\random_features.csv",
-    r"..\src\de_AusDerChronikaEinesFahrendenSchlers.csv",
-    r"..\src\ACV.csv",
-    r"..\src\CebPinadayag.csv",
+    r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
+    r"..\data\adjacency_matrices\random_adjacency.csv",
+    r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
+    r"..\data\adjacency_matrices\ACV.csv",
+    r"..\data\adjacency_matrices\CebPinadayag.csv",
 ]
 LABELS = [
     "keyboard_mash",
@@ -15,13 +15,13 @@ LABELS = [
     "english",
     "cebuano"
 ]
-OUTPUT_FILE = r"..\src\combined_features.csv"
+OUTPUT_FILE = r"..\data\combined_features\combined_features.csv"
 START_INDEX = 0
 
-'''
-INPUT_FILES = [r"..\src\test_adjacency_features.csv", r"..\src\test_adjacency_features_2.csv"]
+r'''
+INPUT_FILES = [r"..\data\adjacency_matrices\test_adjacency_features.csv", r"..\data\adjacency_matrices\test_adjacency_features_2.csv"]
 LABELS = ["test1", "test2"]
-OUTPUT_FILE = r"..\src\test_combined_features.csv"
+OUTPUT_FILE = r"..\data\combined_features\test_combined_features.csv"
 START_INDEX = 1
 '''
 
