@@ -20,7 +20,8 @@ NUM_TRIALS = 6
 #  https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html#sklearn.decomposition.IncrementalPCA
 #  https://scikit-learn.org/stable/modules/cross_validation.html#group-cv
 def ml_model(trial_num, test_id_slice, train_id_slice, max_depth, use_adaboost, adaboost_num_estimators, adaboost_learning_rate):
-    # yay! manual type checking! it's almost as if static type checking is useful!
+    # yay! manual type checking! it's almost a
+    # s if static type checking is useful!
     if not isinstance(trial_num, int):
         raise TypeError('trial_num must be an instance of int')
     if not isinstance(test_id_slice, slice):
@@ -126,8 +127,8 @@ def ml_model(trial_num, test_id_slice, train_id_slice, max_depth, use_adaboost, 
         plt.savefig(r"../src/tree_raw_" + str(trial_idx) + r".png")
 
         tree.plot_tree(clf, class_names=uniques, feature_names=columns)
-        plt.savefig(r"../src/tree_" + str(trial_idx) + r".svg")
-        plt.savefig(r"../src/tree_" + str(trial_idx) + r".png")
+        plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_idx) + r".svg")
+        plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_idx) + r".png")
 
 if __name__ == "__main__":
     for trial_idx in range(NUM_TRIALS):
