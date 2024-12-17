@@ -3,6 +3,8 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 import tqdm
+import regex
+import concurrent.futures
 
 BOOK_FILES = [
     {
@@ -28,6 +30,10 @@ BOOK_FILES = [
     {
         "lang": "es",
         "filepath": "../data/raw/books/es_DonQuijote.txt"
+    },
+    {
+        "lang": "qwerty_mash",
+        "filepath": "../data/utterances/keyboard_mash_sentences.txt"
     }
 ]
 
@@ -175,41 +181,64 @@ def get_sample_text_from_books(lang: str = "", sample_len: int = 0):
 
     start_index = random.randint(0, len(text) - 1 - sample_len)
     sample = text[start_index:start_index + sample_len]
-    return sample, lang
+
+    # sanitize sample text (so only characters - no numbers or punctuation)
+    sample = regex.sub(r'[\W\d_]+', '', sample)
+    i = 1
+    while len(sample) < sample_len:
+        new_index = start_index + sample_len + i
+        if new_index >= len(text):
+            break
+        sample += regex.sub(r'[\W\d_]+', '', text[new_index])
+        i += 1
+
+    return sample.upper(), lang
+
+def process_sample_length(sample_len, samples_count=10000):
+    accuracy = 0
+    langs_checked = {}
+
+    for _ in range(samples_count):
+        sample_text, exp_lang = get_sample_text_from_books(sample_len=sample_len)
+        obs_lang, _ = compare_all_languages(sample_text)
+        if exp_lang == obs_lang:
+            accuracy += 1
+
+        if exp_lang not in langs_checked:
+            langs_checked[exp_lang] = 0
+
+        langs_checked[exp_lang] += 1
+
+    accuracy /= samples_count
+    return sample_len, accuracy
 
 def main():
-    max_sample_len = 20001
-    steps = 20
+    max_sample_len = 1001
+    steps = 200
     sample_len_step = int(max_sample_len / steps) 
 
     sample_lens = []
     test_data = []
 
-    for sample_len in tqdm.tqdm(range(sample_len_step, max_sample_len, sample_len_step), desc="Processing sample lengths"):
-        samples_count = 100
-        accuracy = 0
+    sample_len_range = range(sample_len_step, max_sample_len, sample_len_step)
 
-        langs_checked = {}
-        for i in range(samples_count):
-            sample_text, exp_lang = get_sample_text_from_books(sample_len=sample_len)
-            obs_lang, _ = compare_all_languages(sample_text)
-            if exp_lang == obs_lang:
-                accuracy += 1
+    # Use a ProcessPoolExecutor for parallelization
+    with concurrent.futures.ProcessPoolExecutor() as executor:
+        # Map the process_sample_length function to the range of sample lengths
+        results = list(tqdm.tqdm(
+            executor.map(process_sample_length, sample_len_range),
+            total=len(sample_len_range),
+            desc="Processing sample lengths"
+        ))
 
-            if exp_lang not in langs_checked:
-                langs_checked.update({exp_lang: 0})
-
-            langs_checked[exp_lang] += 1
-
-        accuracy /= samples_count
-        # print(f"sample len { sample_len } accuracy = \t{ accuracy }")
-
-        sample_lens += [sample_len]
-        test_data += [accuracy]
+    # Unpack the results
+    for sample_len, accuracy in results:
+        sample_lens.append(sample_len)
+        test_data.append(accuracy)
 
     # Plotting the data
     plt.figure(figsize=(10, 6))
-    plt.plot(sample_lens, test_data, marker='o', linestyle='-', color='b', label='Accuracy')
+    plt.plot(sample_lens, test_data, marker='', linestyle='-', color='b', label='Accuracy')
 
     # Customizing the plot
     plt.title('Sample Length vs. Accuracy', fontsize=14)
@@ -226,3 +255,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    # for i in range(10):
+    #     print(get_sample_text_from_books(sample_len=100))
