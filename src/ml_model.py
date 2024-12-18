@@ -9,6 +9,7 @@ import sys
 import os
 import pickle
 import time
+import json
 
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
@@ -28,7 +29,7 @@ def get_file_size_gib(filename, decimal_places=2):
 #  https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html#sklearn.decomposition.IncrementalPCA
 #  https://scikit-learn.org/stable/modules/cross_validation.html#group-cv
 # return value format:
-def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename):
+def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename, return_value_save_filename):
     print(f"loading data ({get_file_size_gib(combined_features_filename)} GiB)...")
     dtypes = defaultdict(lambda: np.uint16)
     dtypes["ID"] = int
@@ -190,6 +191,8 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
             "execution_seconds": execution_seconds,
         }
         ret_val.append(ret_val_row)
+    with open(return_value_save_filename, "r", encoding="utf-8") as file:
+        json.dump(ret_val, file)
     return ret_val
 
 
@@ -202,9 +205,11 @@ def main():
     ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
     NUM_TRIALS = 6
     COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
+    RETURN_VALUE_SAVE_FILENAME = '../data/tree_diagrams/10k.json'
 
-    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME, RETURN_VALUE_SAVE_FILENAME)
     print(f"ret_val: {ret_val}")
+    plot_results(ret_val=ret_val, MAX_DEPTH=MAX_DEPTH)
 
 def main_subset():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
