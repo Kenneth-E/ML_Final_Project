@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 import sys
 import os
+import pickle
 
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
@@ -32,6 +33,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
     dataset = pd.read_csv(combined_features_filename, index_col=0, parse_dates=True, dtype=dtypes)
     print("dataset:")
     print(dataset)
+    print(f"size in RAM: {get_object_size_gib(dataset)} GiB")
     print("--------")
 
     print("dataset dtypes:")
@@ -161,6 +163,13 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
                 tree_as_text = tree.export_text(clf, class_names=uniques, feature_names=X_columns, max_depth=100, show_weights=True)
                 file.write(tree_as_text)
 
+        pickle_filename = r"../data/tree_diagrams/tree_" + str(trial_num) + r".pickle"
+        with open(pickle_filename, 'wb') as pickle_file:
+            pickle.dump(clf, pickle_file)
+        # to load:
+        # with open(pickle_filename, 'rb') as f:
+        #     data = pickle.load(f)
+
 
 def main():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
@@ -176,7 +185,7 @@ def main():
 
 def main_subset():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
-    TRAIN_IDS = [slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000)]
+    TRAIN_IDS = [slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000)]
     MAX_DEPTH = [5, 10, 20, 40, None, 1] # None = unlimited depth
     USE_ADABOOST = [False, False, False, False, False, True]
     ADABOOST_NUM_ESTIMATORS = [None, None, None, None, None, 100]
@@ -187,4 +196,4 @@ def main_subset():
     ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
 
 if __name__ == "__main__":
-    main_subset()
+    main()

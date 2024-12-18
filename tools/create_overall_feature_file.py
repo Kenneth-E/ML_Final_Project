@@ -25,7 +25,7 @@ def combine_csv_column_headers(csv_files):
     combined_headers = list(all_headers)
     return combined_headers
 
-def combine_csvs(input_files, output_file, labels, start_index, random_seed):
+def combine_csvs(input_files, output_file, labels, start_index, random_seed, max_rows):
     combined_df = pd.DataFrame()
 
     # Iterate over each input file and its corresponding label
@@ -73,6 +73,11 @@ def combine_csvs(input_files, output_file, labels, start_index, random_seed):
     print("reordering columns")
     column_order = ['ID'] + [col for col in combined_df.columns if col not in ['ID', 'label']] + ['label']
     combined_df = combined_df[column_order]
+
+    print(f"truncating rows: {combined_df.shape[0]} rows to {max_rows} rows (None = do not truncate)")
+    if max_rows is not None:
+        combined_df = combined_df.head(max_rows)
+    print(f"current size of combined_df: {get_object_size_gib(combined_df)} GiB")
 
     # Write to file
     print("writing to file")
@@ -126,8 +131,9 @@ def main():
     OUTPUT_FILE = r"..\data\combined_features\combined_features.csv"
     START_INDEX = 0
     RANDOM_SEED = 42
+    MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
 
-    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED)
+    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED, MAX_ROWS)
 
     print("finished create_overall_feature_file.py")
 
@@ -154,9 +160,10 @@ def main_subset():
     OUTPUT_FILE = r"..\data\combined_features\combined_features_subset.csv"
     START_INDEX = 1
     RANDOM_SEED = 42
+    MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
 
     print("beginning create_overall_feature_file.py")
-    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED)
+    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED, MAX_ROWS)
     print("finished create_overall_feature_file.py")
 
 def test():
@@ -165,9 +172,10 @@ def test():
     OUTPUT_FILE = r"..\data\test\test_combined_features.csv"
     START_INDEX = 1
     RANDOM_SEED = 42
+    MAX_ROWS = None # None = unlimited rows, may run out of memory
 
     print("beginning create_overall_feature_file.py")
-    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED)
+    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED, MAX_ROWS)
     print("finished create_overall_feature_file.py")
 
 if __name__ == "__main__":
