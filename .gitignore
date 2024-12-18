@@ -2,6 +2,7 @@
 adjacency_matrices
 combined_features
 utterances
+tree_diagrams/*.svg
 __pycache__
 README.md
 wiktionary
