@@ -16,7 +16,8 @@ def append_csv_matrix_to_file(filename, matrix):
         writer = csv.writer(file)
         writer.writerows(matrix)
 
-def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacency_filenames, bible_remove_numbering_list):
+def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacency_filenames, bible_remove_numbering_list, np_int_data_type):
+    max_int = np.iinfo(np_int_data_type).max
     for file_idx in range(num_files):
         input_filename = input_sentences_filenames[file_idx]
         output_filename = output_adjacency_filenames[file_idx]
@@ -58,11 +59,21 @@ def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacen
 
                     if letter_pair_idx + 1 >= len(sample_adjacency_list):
                         sample_adjacency_list = np.pad(sample_adjacency_list, (0, len(letter_pair_dict) - len(sample_adjacency_list)), constant_values=(0,0))
-                    sample_adjacency_list[letter_pair_idx] += 1 / num_letter_adjacencies
+                    sample_adjacency_list[letter_pair_idx] += 1
+                # convert letter pair counts to fixed point
+                for letter_pair_idx, count in enumerate(sample_adjacency_list):
+                    letter_pair_proportion = count / num_letter_adjacencies
+                    # use ceiling because it is rare to have a proportion of almost 1 so we can round up, but it will
+                    # be common to have a proportion of almost 0, but it should not be rounded to 0
+                    # yes, precision will be lost, and they won't sum to the max_int exactly
+                    letter_pair_fixed_point = np.ceil(max_int * letter_pair_proportion)
+                    letter_pair_fixed_point = int(letter_pair_fixed_point)
+                    sample_adjacency_list[letter_pair_idx] = letter_pair_fixed_point
                 adjacency_matrix.append(sample_adjacency_list)
 
         print(f"skipped_lines: {skipped_lines}")
         print(f"INPUT_FILENAME: {input_filename}")
+        print(f"OUTPUT_FILENAME: {output_filename}")
         print(f"---------")
 
         append_csv_row_to_file(output_filename, letter_pair_dict.keys())
@@ -71,9 +82,10 @@ def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacen
 def main():
     print("beginning create_adjacency_matrix.py")
 
-    NUM_FILES = 16
+    NUM_FILES = 17
     INPUT_SENTENCES_FILENAMES = [
         r"..\data\utterances\keyboard_mash_sentences.txt",
+        r"..\data\utterances\keyboard_mash_sentences_dvorak_simulated.txt",
         r"..\data\utterances\random_sentences.txt",
         r"..\data\raw\books\de_AusDerChronikaEinesFahrendenSchlers.txt",
         r"..\data\raw\Bible_texts\ACV.txt",
@@ -93,6 +105,7 @@ def main():
     # temporarily use raw book sources until files can be parsed well TODO
     OUTPUT_ADJACENCY_FILENAMES = [
         r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
+        r"..\data\adjacency_matrices\keyboard_mash_sentences_dvorak_simulated.csv",
         r"..\data\adjacency_matrices\random_adjacency.csv",
         r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
         r"..\data\adjacency_matrices\ACV.csv",
@@ -113,6 +126,7 @@ def main():
         False,
         False,
         False,
+        False,
         True,
         True,
         True,
@@ -127,9 +141,10 @@ def main():
         True,
         True,
     ]
+    NP_INT_DATA_TYPE = np.uint16
 
     create_adjacency_matrix(NUM_FILES, INPUT_SENTENCES_FILENAMES, OUTPUT_ADJACENCY_FILENAMES,
-                            BIBLE_REMOVE_NUMBERING_LIST)
+                            BIBLE_REMOVE_NUMBERING_LIST, NP_INT_DATA_TYPE)
 
     print("finished create_adjacency_matrix.py")
 
