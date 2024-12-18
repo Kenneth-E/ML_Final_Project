@@ -7,15 +7,6 @@ from collections import defaultdict
 import sys
 import os
 
-TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
-TRAIN_IDS = [slice(1_000, 400_000), slice(1_000, 400_000), slice(1_000, 400_000), slice(1_000, 400_000), slice(1_000, 400_000), slice(1_000, 400_000)]
-MAX_DEPTH = [5, 10, 20, 40, None, 2] # None = unlimited depth
-USE_ADABOOST = [False, False, False, False, False, True]
-ADABOOST_NUM_ESTIMATORS = [None, None, None, None, None, 100]
-ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
-NUM_TRIALS = 6
-COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
-
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
     gibibytes = bytes / (1024 * 1024 * 1024)
@@ -33,12 +24,12 @@ def get_file_size_gib(filename, decimal_places=2):
 #  https://scikit-learn.org/stable/modules/decomposition.html#pca
 #  https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html#sklearn.decomposition.IncrementalPCA
 #  https://scikit-learn.org/stable/modules/cross_validation.html#group-cv
-def ml_model(test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list):
-    print(f"loading data ({get_file_size_gib(COMBINED_FEATURES_FILENAME)} GiB)...")
+def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename):
+    print(f"loading data ({get_file_size_gib(combined_features_filename)} GiB)...")
     dtypes = defaultdict(lambda: np.uint16)
     dtypes["ID"] = int
     dtypes["label"] = str
-    dataset = pd.read_csv(COMBINED_FEATURES_FILENAME, index_col=0, parse_dates=True, dtype=dtypes)
+    dataset = pd.read_csv(combined_features_filename, index_col=0, parse_dates=True, dtype=dtypes)
     print("dataset:")
     print(dataset)
     print("--------")
@@ -58,7 +49,7 @@ def ml_model(test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_nu
     print(uniques)
     print("--------")
 
-    for trial_idx in range(NUM_TRIALS):
+    for trial_idx in range(num_trials):
         trial_num = trial_idx
         test_id_slice = test_ids[trial_idx]
         train_id_slice = train_ids[trial_idx]
@@ -98,6 +89,7 @@ def ml_model(test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_nu
         print("--------")
 
         X = dataset.drop("label", axis = 1)
+        X_columns = X.columns.tolist()
         train_X = X[train_id_slice]
         print("train_X:")
         print(train_X)
@@ -154,15 +146,45 @@ def ml_model(test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_nu
 
         if not use_adaboost:
             tree.plot_tree(clf)
-            plt.savefig(r"../src/tree_raw_" + str(trial_num) + r".svg")
-            plt.savefig(r"../src/tree_raw_" + str(trial_num) + r".png")
+            plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".svg")
+            plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".png")
 
-            tree.plot_tree(clf, class_names=uniques, feature_names=columns)
+            tree.plot_tree(clf, class_names=uniques, feature_names=X_columns)
             plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_num) + r".svg")
             plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_num) + r".png")
 
+            with open(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".txt", "w", encoding="utf8") as file:
+                tree_as_text = tree.export_text(clf, max_depth=100, show_weights=True)
+                file.write(tree_as_text)
+
+            with open(r"../data/tree_diagrams/tree_" + str(trial_num) + r".txt", "w", encoding="utf8") as file:
+                tree_as_text = tree.export_text(clf, class_names=uniques, feature_names=X_columns, max_depth=100, show_weights=True)
+                file.write(tree_as_text)
+
+
 def main():
-    ml_model(TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE)
+    TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
+    TRAIN_IDS = [slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000)]
+    MAX_DEPTH = [5, 10, 20, 40, None, 2] # None = unlimited depth
+    USE_ADABOOST = [False, False, False, False, False, True]
+    ADABOOST_NUM_ESTIMATORS = [None, None, None, None, None, 100]
+    ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
+    NUM_TRIALS = 6
+    COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
+
+    ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+
+def main_subset():
+    TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
+    TRAIN_IDS = [slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000), slice(1_000, 100_000)]
+    MAX_DEPTH = [5, 10, 20, 40, None, 1] # None = unlimited depth
+    USE_ADABOOST = [False, False, False, False, False, True]
+    ADABOOST_NUM_ESTIMATORS = [None, None, None, None, None, 100]
+    ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
+    NUM_TRIALS = 6
+    COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features_subset.csv'
+
+    ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
 
 if __name__ == "__main__":
-    main()
+    main_subset()
