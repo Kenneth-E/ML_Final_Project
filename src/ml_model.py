@@ -1,3 +1,4 @@
+from tkinter.tix import MAX
 import numpy as np
 import pandas as pd
 from sklearn import tree
@@ -218,6 +219,39 @@ def main_subset():
 
     ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
     print(f"ret_val: {ret_val}")
+    plot_results(ret_val=ret_val, MAX_DEPTH=MAX_DEPTH)
+
+def plot_results(ret_val, MAX_DEPTH):
+
+    # Test accuracy vs. maximum depth
+
+    plt.figure(figsize=(8, 5))
+    for i, trial in enumerate(ret_val):
+        plt.plot([MAX_DEPTH[i]] * len(trial["test_accuracy"]), trial["test_accuracy"], 
+             label=f"Trial {i+1}", marker="o")
+    plt.xlabel("Max Depth")
+    plt.ylabel("Test Accuracy")
+    plt.title("Test Accuracy vs. Maximum Depth")
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+    # Training vs. test ccuracy
+
+    x = np.arange(len(ret_val))
+    width = 0.35
+    plt.figure(figsize=(8, 5))
+    # Iterate through trials and plot train/test accuracy
+    for i, trial in enumerate(ret_val):
+        plt.bar(x[i] - width/2, trial["train_accuracy"], width, label=f"Trial {i+1} Train Accuracy")
+        plt.bar(x[i] + width/2, trial["test_accuracy"], width, label=f"Trial {i+1} Test Accuracy")
+    plt.xlabel("Trial")
+    plt.ylabel("Accuracy")
+    plt.title("Training vs. Test Accuracy")
+    plt.xticks(x, [f"Trial {i+1}" for i in range(len(ret_val))])
+    plt.legend()
+    plt.grid(axis="y")
+    plt.show()
 
 if __name__ == "__main__":
     main()
