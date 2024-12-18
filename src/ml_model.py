@@ -7,6 +7,7 @@ from collections import defaultdict
 import sys
 import os
 import pickle
+import time
 
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
@@ -25,6 +26,7 @@ def get_file_size_gib(filename, decimal_places=2):
 #  https://scikit-learn.org/stable/modules/decomposition.html#pca
 #  https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html#sklearn.decomposition.IncrementalPCA
 #  https://scikit-learn.org/stable/modules/cross_validation.html#group-cv
+# return value format:
 def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename):
     print(f"loading data ({get_file_size_gib(combined_features_filename)} GiB)...")
     dtypes = defaultdict(lambda: np.uint16)
@@ -51,7 +53,10 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
     print(uniques)
     print("--------")
 
+    ret_val = []
+
     for trial_idx in range(num_trials):
+        start_time = time.time()
         trial_num = trial_idx
         test_id_slice = test_ids[trial_idx]
         train_id_slice = train_ids[trial_idx]
@@ -169,6 +174,23 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         # to load:
         # with open(pickle_filename, 'rb') as f:
         #     data = pickle.load(f)
+        end_time = time.time()
+        execution_seconds = end_time - start_time
+
+        ret_val_row = {
+            "trial_num": trial_num,
+            "test_X": test_X,
+            "test_y": test_y,
+            "train_matching_elements": train_matching_elements,
+            "train_total_elements": train_total_elements,
+            "train_accuracy": train_accuracy,
+            "test_matching_elements": test_matching_elements,
+            "test_total_elements": test_total_elements,
+            "test_accuracy": test_accuracy,
+            "execution_seconds": execution_seconds,
+        }
+        ret_val.append(ret_val_row)
+    return ret_val
 
 
 def main():
@@ -181,7 +203,8 @@ def main():
     NUM_TRIALS = 6
     COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
 
-    ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    print(f"ret_val: {ret_val}")
 
 def main_subset():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
@@ -193,7 +216,8 @@ def main_subset():
     NUM_TRIALS = 6
     COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features_subset.csv'
 
-    ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    print(f"ret_val: {ret_val}")
 
 if __name__ == "__main__":
     main()
