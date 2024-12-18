@@ -179,16 +179,16 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         execution_seconds = end_time - start_time
 
         ret_val_row = {
-            "trial_num": trial_num,
-            "test_X": test_X,
-            "test_y": test_y,
-            "train_matching_elements": train_matching_elements,
-            "train_total_elements": train_total_elements,
-            "train_accuracy": train_accuracy,
-            "test_matching_elements": test_matching_elements,
-            "test_total_elements": test_total_elements,
-            "test_accuracy": test_accuracy,
-            "execution_seconds": execution_seconds,
+            "trial_num": str(trial_num),
+            "test_X": str(test_X),
+            "test_y": str(test_y),
+            "train_matching_elements": str(train_matching_elements),
+            "train_total_elements": str(train_total_elements),
+            "train_accuracy": str(train_accuracy),
+            "test_matching_elements": str(test_matching_elements),
+            "test_total_elements": str(test_total_elements),
+            "test_accuracy": str(test_accuracy),
+            "execution_seconds": str(execution_seconds),
         }
         ret_val.append(ret_val_row)
     with open(return_value_save_filename, "w", encoding="utf-8") as file:
