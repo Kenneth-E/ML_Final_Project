@@ -89,24 +89,24 @@ def combine_csvs(input_files, output_file, labels, start_index, random_seed, max
 def main():
     print("beginning create_overall_feature_file.py")
     INPUT_FILES = [
-        r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
-        r"..\data\adjacency_matrices\keyboard_mash_sentences_dvorak_simulated.csv",
-        r"..\data\adjacency_matrices\random_adjacency.csv",
-        r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
-        r"..\data\adjacency_matrices\ACV.csv",
-        r"..\data\adjacency_matrices\CebPinadayag.csv",
-        r"..\data\adjacency_matrices\CzeCSP.csv",
-        r"..\data\adjacency_matrices\DutSVV.csv",
-        r"..\data\adjacency_matrices\Esperanto.csv",
-        r"..\data\adjacency_matrices\FinBiblia.csv",
-        r"..\data\adjacency_matrices\FrePGR.csv",
-        r"..\data\adjacency_matrices\Haitian.csv",
-        r"..\data\adjacency_matrices\LvGluck8.csv",
-        r"..\data\adjacency_matrices\NorSMB.csv",
-        r"..\data\adjacency_matrices\PolGdanska.csv",
-        r"..\data\adjacency_matrices\PorNVA.csv",
-        r"..\data\adjacency_matrices\Swe1917.csv",
-        r"..\data\adjacency_matrices\nova_vulgata.csv",
+        r"../data/adjacency_matrices/keyboard_mash_adjacency.csv",
+        r"../data/adjacency_matrices/keyboard_mash_sentences_dvorak_simulated.csv",
+        r"../data/adjacency_matrices/random_adjacency.csv",
+        r"../data/adjacency_matrices/de_AusDerChronikaEinesFahrendenSchlers.csv",
+        r"../data/adjacency_matrices/ACV.csv",
+        r"../data/adjacency_matrices/CebPinadayag.csv",
+        r"../data/adjacency_matrices/CzeCSP.csv",
+        r"../data/adjacency_matrices/DutSVV.csv",
+        r"../data/adjacency_matrices/Esperanto.csv",
+        r"../data/adjacency_matrices/FinBiblia.csv",
+        r"../data/adjacency_matrices/FrePGR.csv",
+        r"../data/adjacency_matrices/Haitian.csv",
+        r"../data/adjacency_matrices/LvGluck8.csv",
+        r"../data/adjacency_matrices/NorSMB.csv",
+        r"../data/adjacency_matrices/PolGdanska.csv",
+        r"../data/adjacency_matrices/PorNVA.csv",
+        r"../data/adjacency_matrices/Swe1917.csv",
+        r"../data/adjacency_matrices/nova_vulgata.csv",
     ]
     LABELS = [
         "keyboard_mash",
@@ -128,7 +128,7 @@ def main():
         "Swedish",
         "Modern Ecclesiastical Latin"
     ]
-    OUTPUT_FILE = r"..\data\combined_features\combined_features.csv"
+    OUTPUT_FILE = r"../data/combined_features/combined_features.csv"
     START_INDEX = 0
     RANDOM_SEED = 42
     MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
@@ -140,13 +140,13 @@ def main():
 def main_subset():
     print("beginning create_overall_feature_file.py")
     INPUT_FILES = [
-        r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
-        r"..\data\adjacency_matrices\keyboard_mash_sentences_dvorak_simulated.csv",
-        r"..\data\adjacency_matrices\random_adjacency.csv",
-        r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
-        r"..\data\adjacency_matrices\ACV.csv",
-        r"..\data\adjacency_matrices\DutSVV.csv",
-        r"..\data\adjacency_matrices\FrePGR.csv",
+        r"../data/adjacency_matrices/keyboard_mash_adjacency.csv",
+        r"../data/adjacency_matrices/keyboard_mash_sentences_dvorak_simulated.csv",
+        r"../data/adjacency_matrices/random_adjacency.csv",
+        r"../data/adjacency_matrices/de_AusDerChronikaEinesFahrendenSchlers.csv",
+        r"../data/adjacency_matrices/ACV.csv",
+        r"../data/adjacency_matrices/DutSVV.csv",
+        r"../data/adjacency_matrices/FrePGR.csv",
     ]
     LABELS = [
         "keyboard_mash",
@@ -157,7 +157,7 @@ def main_subset():
         "Dutch",
         "French",
     ]
-    OUTPUT_FILE = r"..\data\combined_features\combined_features_subset.csv"
+    OUTPUT_FILE = r"../data/combined_features/combined_features_subset.csv"
     START_INDEX = 1
     RANDOM_SEED = 42
     MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
@@ -167,9 +167,12 @@ def main_subset():
     print("finished create_overall_feature_file.py")
 
 def test():
-    INPUT_FILES = [r"..\data\test\test_adjacency.csv", r"..\data\test\test_adjacency_2.csv"]
+    INPUT_FILES = [
+        r"../data/test/test_adjacency.csv",
+        r"../data/test/test_adjacency_2.csv"
+    ]
     LABELS = ["test1", "test2"]
-    OUTPUT_FILE = r"..\data\test\test_combined_features.csv"
+    OUTPUT_FILE = r"../data/test/test_combined_features.csv"
     START_INDEX = 1
     RANDOM_SEED = 42
     MAX_ROWS = None # None = unlimited rows, may run out of memory
