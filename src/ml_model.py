@@ -191,7 +191,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
             "execution_seconds": execution_seconds,
         }
         ret_val.append(ret_val_row)
-    with open(return_value_save_filename, "r", encoding="utf-8") as file:
+    with open(return_value_save_filename, "w", encoding="utf-8") as file:
         json.dump(ret_val, file)
     return ret_val
 
