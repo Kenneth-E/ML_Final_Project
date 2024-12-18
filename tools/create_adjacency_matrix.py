@@ -82,7 +82,7 @@ def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacen
 def main():
     print("beginning create_adjacency_matrix.py")
 
-    NUM_FILES = 17
+    NUM_FILES = 18
     INPUT_SENTENCES_FILENAMES = [
         r"..\data\utterances\keyboard_mash_sentences.txt",
         r"..\data\utterances\keyboard_mash_sentences_dvorak_simulated.txt",
@@ -101,6 +101,7 @@ def main():
         r"..\data\raw\Bible_texts\PolGdanska.txt",
         r"..\data\raw\Bible_texts\PorNVA.txt",
         r"..\data\raw\Bible_texts\Swe1917.txt",
+        r"..\data\raw\Bible_texts\nova_vulgata.txt",
     ]
     # temporarily use raw book sources until files can be parsed well TODO
     OUTPUT_ADJACENCY_FILENAMES = [
@@ -121,12 +122,14 @@ def main():
         r"..\data\adjacency_matrices\PolGdanska.csv",
         r"..\data\adjacency_matrices\PorNVA.csv",
         r"..\data\adjacency_matrices\Swe1917.csv",
+        r"..\data\adjacency_matrices\nova_vulgata.csv",
     ]
     BIBLE_REMOVE_NUMBERING_LIST = [
         False,
         False,
         False,
         False,
+        True,
         True,
         True,
         True,
