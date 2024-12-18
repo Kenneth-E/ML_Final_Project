@@ -9,6 +9,7 @@ import sys
 import os
 import pickle
 import time
+import json
 
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
@@ -28,7 +29,7 @@ def get_file_size_gib(filename, decimal_places=2):
 #  https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.IncrementalPCA.html#sklearn.decomposition.IncrementalPCA
 #  https://scikit-learn.org/stable/modules/cross_validation.html#group-cv
 # return value format:
-def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename):
+def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list, adaboost_num_estimators_list, adaboost_learning_rate_list, combined_features_filename, return_value_save_filename):
     print(f"loading data ({get_file_size_gib(combined_features_filename)} GiB)...")
     dtypes = defaultdict(lambda: np.uint16)
     dtypes["ID"] = int
@@ -65,8 +66,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         use_adaboost = use_adaboost_list[trial_idx]
         adaboost_num_estimators = adaboost_num_estimators_list[trial_idx]
         adaboost_learning_rate = adaboost_learning_rate_list[trial_idx]
-        # yay! manual type checking! it's almost a
-        # s if static type checking is useful!
+        # yay! manual type checking! it's almost as if static type checking is useful!
         if not isinstance(trial_num, int):
             raise TypeError('trial_num must be an instance of int')
         if not isinstance(test_id_slice, slice):
@@ -179,18 +179,20 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         execution_seconds = end_time - start_time
 
         ret_val_row = {
-            "trial_num": trial_num,
-            "test_X": test_X,
-            "test_y": test_y,
-            "train_matching_elements": train_matching_elements,
-            "train_total_elements": train_total_elements,
-            "train_accuracy": train_accuracy,
-            "test_matching_elements": test_matching_elements,
-            "test_total_elements": test_total_elements,
-            "test_accuracy": test_accuracy,
-            "execution_seconds": execution_seconds,
+            "trial_num": str(trial_num),
+            "test_X": str(test_X),
+            "test_y": str(test_y),
+            "train_matching_elements": str(train_matching_elements),
+            "train_total_elements": str(train_total_elements),
+            "train_accuracy": str(train_accuracy),
+            "test_matching_elements": str(test_matching_elements),
+            "test_total_elements": str(test_total_elements),
+            "test_accuracy": str(test_accuracy),
+            "execution_seconds": str(execution_seconds),
         }
         ret_val.append(ret_val_row)
+    with open(return_value_save_filename, "w", encoding="utf-8") as file:
+        json.dump(ret_val, file)
     return ret_val
 
 
@@ -203,9 +205,11 @@ def main():
     ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
     NUM_TRIALS = 6
     COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
+    RETURN_VALUE_SAVE_FILENAME = '../data/tree_diagrams/10k.json'
 
-    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
+    ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME, RETURN_VALUE_SAVE_FILENAME)
     print(f"ret_val: {ret_val}")
+    plot_results(ret_val=ret_val, MAX_DEPTH=MAX_DEPTH)
 
 def main_subset():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
