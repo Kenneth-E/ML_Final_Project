@@ -63,14 +63,14 @@ def main():
     MAX_SENTENCES = 1
     NUM_FILES = 3
     INPUT_WORDS_FILENAMES = [
-        r"../data/raw/words/keyboard_mash_words.txt",
-        r"../data/raw/words/keyboard_mash_words.txt",
-        r"../data/raw/words/random_words.txt",
+        r"..\data\raw\words\keyboard_mash_words.txt",
+        r"..\data\raw\words\keyboard_mash_words.txt",
+        r"..\data\raw\words\random_words.txt",
     ]
     OUTPUT_SENTENCES_FILENAMES = [
-        r"../data/utterances/keyboard_mash_sentences.txt",
-        r"../data/utterances/keyboard_mash_sentences_dvorak_simulated.txt",
-        r"../data/utterances/random_sentences.txt",
+        r"..\data\utterances\keyboard_mash_sentences.txt",
+        r"..\data\utterances\keyboard_mash_sentences_dvorak_simulated.txt",
+        r"..\data\utterances\random_sentences.txt",
     ]
     CONVERT_TO_DVORAK_LIST = [
         False,
