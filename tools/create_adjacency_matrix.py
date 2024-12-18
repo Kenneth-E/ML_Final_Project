@@ -16,9 +16,10 @@ def append_csv_matrix_to_file(filename, matrix):
         writer = csv.writer(file)
         writer.writerows(matrix)
 
-def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacency_filenames, bible_remove_numbering_list, np_int_data_type):
+def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacency_filenames, bible_remove_numbering_list, np_int_data_type, convert_to_proportions):
     max_int = np.iinfo(np_int_data_type).max
     for file_idx in range(num_files):
+        print("building adjacency matrix")
         input_filename = input_sentences_filenames[file_idx]
         output_filename = output_adjacency_filenames[file_idx]
         bible_remove_numbering = bible_remove_numbering_list[file_idx]
@@ -61,23 +62,26 @@ def create_adjacency_matrix(num_files, input_sentences_filenames, output_adjacen
                         sample_adjacency_list = np.pad(sample_adjacency_list, (0, len(letter_pair_dict) - len(sample_adjacency_list)), constant_values=(0,0))
                     sample_adjacency_list[letter_pair_idx] += 1
                 # convert letter pair counts to fixed point
-                for letter_pair_idx, count in enumerate(sample_adjacency_list):
-                    letter_pair_proportion = count / num_letter_adjacencies
-                    # use ceiling because it is rare to have a proportion of almost 1 so we can round up, but it will
-                    # be common to have a proportion of almost 0, but it should not be rounded to 0
-                    # yes, precision will be lost, and they won't sum to the max_int exactly
-                    letter_pair_fixed_point = np.ceil(max_int * letter_pair_proportion)
-                    letter_pair_fixed_point = int(letter_pair_fixed_point)
-                    sample_adjacency_list[letter_pair_idx] = letter_pair_fixed_point
+                if convert_to_proportions:
+                    for letter_pair_idx, count in enumerate(sample_adjacency_list):
+                        letter_pair_proportion = count / num_letter_adjacencies
+                        # use ceiling because it is rare to have a proportion of almost 1 so we can round up, but it will
+                        # be common to have a proportion of almost 0, but it should not be rounded to 0
+                        # yes, precision will be lost, and they won't sum to the max_int exactly
+                        letter_pair_fixed_point = np.ceil(max_int * letter_pair_proportion)
+                        letter_pair_fixed_point = int(letter_pair_fixed_point)
+                        sample_adjacency_list[letter_pair_idx] = letter_pair_fixed_point
                 adjacency_matrix.append(sample_adjacency_list)
 
+        print("writing to disk")
+        append_csv_row_to_file(output_filename, letter_pair_dict.keys())
+        append_csv_matrix_to_file(output_filename, adjacency_matrix)
+
+        print("summary")
         print(f"skipped_lines: {skipped_lines}")
         print(f"INPUT_FILENAME: {input_filename}")
         print(f"OUTPUT_FILENAME: {output_filename}")
         print(f"---------")
-
-        append_csv_row_to_file(output_filename, letter_pair_dict.keys())
-        append_csv_matrix_to_file(output_filename, adjacency_matrix)
 
 def main():
     print("beginning create_adjacency_matrix.py")
@@ -145,9 +149,10 @@ def main():
         True,
     ]
     NP_INT_DATA_TYPE = np.uint16
+    CONVERT_TO_PROPORTIONS = True
 
     create_adjacency_matrix(NUM_FILES, INPUT_SENTENCES_FILENAMES, OUTPUT_ADJACENCY_FILENAMES,
-                            BIBLE_REMOVE_NUMBERING_LIST, NP_INT_DATA_TYPE)
+                            BIBLE_REMOVE_NUMBERING_LIST, NP_INT_DATA_TYPE, CONVERT_TO_PROPORTIONS)
 
     print("finished create_adjacency_matrix.py")
 
