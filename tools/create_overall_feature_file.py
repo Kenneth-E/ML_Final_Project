@@ -131,7 +131,7 @@ def main():
     OUTPUT_FILE = r"../data/combined_features/combined_features.csv"
     START_INDEX = 0
     RANDOM_SEED = 42
-    MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
+    MAX_ROWS = 10_000 # None = unlimited rows, may run out of memory
 
     combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED, MAX_ROWS)
 
@@ -160,7 +160,7 @@ def main_subset():
     OUTPUT_FILE = r"../data/combined_features/combined_features_subset.csv"
     START_INDEX = 1
     RANDOM_SEED = 42
-    MAX_ROWS = 100_000 # None = unlimited rows, may run out of memory
+    MAX_ROWS = 10_000 # None = unlimited rows, may run out of memory
 
     print("beginning create_overall_feature_file.py")
     combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED, MAX_ROWS)
