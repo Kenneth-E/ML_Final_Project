@@ -240,7 +240,11 @@ def plot_results(ret_val, MAX_DEPTH):
     plt.grid()
     plt.show()
 
-    # Training vs. test ccuracy
+    folder_path = "../data/matplot_graphs/"
+    file_name = "depth_vs_test_accuracy.png"
+    plt.savefig(folder_path + file_name)
+
+    # Training vs. test accuracy
 
     x = np.arange(len(ret_val))
     width = 0.35
@@ -256,6 +260,10 @@ def plot_results(ret_val, MAX_DEPTH):
     plt.legend()
     plt.grid(axis="y")
     plt.show()
+
+    folder_path = "../data/matplot_graphs/"
+    file_name = "taining_vs_test_accuracy.png"
+    plt.savefig(folder_path + file_name)
 
 if __name__ == "__main__":
     main()
