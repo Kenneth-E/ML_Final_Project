@@ -65,8 +65,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         use_adaboost = use_adaboost_list[trial_idx]
         adaboost_num_estimators = adaboost_num_estimators_list[trial_idx]
         adaboost_learning_rate = adaboost_learning_rate_list[trial_idx]
-        # yay! manual type checking! it's almost a
-        # s if static type checking is useful!
+        # yay! manual type checking! it's almost as if static type checking is useful!
         if not isinstance(trial_num, int):
             raise TypeError('trial_num must be an instance of int')
         if not isinstance(test_id_slice, slice):
