@@ -130,6 +130,9 @@ def ml_model(trial_num, test_id_slice, train_id_slice, max_depth, use_adaboost, 
         plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_idx) + r".svg")
         plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_idx) + r".png")
 
-if __name__ == "__main__":
+def main():
     for trial_idx in range(NUM_TRIALS):
         ml_model(trial_idx, TEST_IDS[trial_idx], TRAIN_IDS[trial_idx], MAX_DEPTH[trial_idx], USE_ADABOOST[trial_idx], ADABOOST_NUM_ESTIMATORS[trial_idx], ADABOOST_LEARNING_RATE[trial_idx])
+
+if __name__ == "__main__":
+    main()
