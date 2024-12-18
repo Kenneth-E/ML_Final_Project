@@ -88,33 +88,6 @@ for file_idx in range(NUM_FILES):
     print(f"skipped_lines: {skipped_lines}")
     print(f"INPUT_FILENAME: {INPUT_FILENAME}")
     print(f"---------")
-    r'''
-    with open(INPUT_FILENAME, "r") as words_file:
-        for line_idx, line in enumerate(words_file):
-            # line = words_file.readline()
-            sentence = line.strip()
-            for idx in range(len(sentence) - 1):
-                letter_1 = sentence[idx]
-                letter_2 = sentence[idx + 1]
-                letter_pair = (letter_1, letter_2)
-
-                letter_pair_idx = letter_pair_dict[letter_pair]
-
-                if letter_pair in adjacency_matrix:
-                    entry_list = adjacency_matrix[letter_pair]
-                    if len(entry_list) < line_idx + 1:
-                        length_growth = (line_idx + 1) - len(entry_list)
-                        entry_list += [0] * length_growth
-                    entry_list[line_idx] += 1 / len(sentence)
-                else:
-                    adjacency_matrix[letter_pair] = [0] * (line_idx + 1)
-                    entry_list = adjacency_matrix[letter_pair]
-                    entry_list[line_idx] += 1 / len(sentence)
-
-    for letter_pair, count in adjacency_matrix.items():
-        list = [letter_pair[0], letter_pair[1], count]
-        append_csv_row_to_file(OUTPUT_FILENAME, list)
-                    '''
 
     append_csv_row_to_file(OUTPUT_FILENAME, letter_pair_dict.keys())
     append_csv_matrix_to_file(OUTPUT_FILENAME, adjacency_matrix)
