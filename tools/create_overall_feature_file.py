@@ -101,6 +101,7 @@ def main():
         r"..\data\adjacency_matrices\PolGdanska.csv",
         r"..\data\adjacency_matrices\PorNVA.csv",
         r"..\data\adjacency_matrices\Swe1917.csv",
+        r"..\data\adjacency_matrices\nova_vulgata.csv",
     ]
     LABELS = [
         "keyboard_mash",
@@ -111,7 +112,7 @@ def main():
         "Cebuano",
         "Czech",
         "Dutch",
-        "Spanish",
+        "Esperanto",
         "Finnish",
         "French",
         "Haitian",
@@ -120,6 +121,7 @@ def main():
         "Polish",
         "Portugese",
         "Swedish",
+        "Modern Ecclesiastical Latin"
     ]
     OUTPUT_FILE = r"..\data\combined_features\combined_features.csv"
     START_INDEX = 0
@@ -128,6 +130,35 @@ def main():
     combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED)
 
     print("finished create_overall_feature_file.py")
+
+def main_subset():
+    print("beginning create_overall_feature_file.py")
+    INPUT_FILES = [
+        r"..\data\adjacency_matrices\keyboard_mash_adjacency.csv",
+        r"..\data\adjacency_matrices\keyboard_mash_sentences_dvorak_simulated.csv",
+        r"..\data\adjacency_matrices\random_adjacency.csv",
+        r"..\data\adjacency_matrices\de_AusDerChronikaEinesFahrendenSchlers.csv",
+        r"..\data\adjacency_matrices\ACV.csv",
+        r"..\data\adjacency_matrices\DutSVV.csv",
+        r"..\data\adjacency_matrices\FrePGR.csv",
+    ]
+    LABELS = [
+        "keyboard_mash",
+        "keyboard_mash_dvorak_simulated",
+        "random",
+        "German",
+        "English",
+        "Dutch",
+        "French",
+    ]
+    OUTPUT_FILE = r"..\data\combined_features\combined_features_subset.csv"
+    START_INDEX = 1
+    RANDOM_SEED = 42
+
+    print("beginning create_overall_feature_file.py")
+    combine_csvs(INPUT_FILES, OUTPUT_FILE, LABELS, START_INDEX, RANDOM_SEED)
+    print("finished create_overall_feature_file.py")
+
 def test():
     INPUT_FILES = [r"..\data\test\test_adjacency.csv", r"..\data\test\test_adjacency_2.csv"]
     LABELS = ["test1", "test2"]
