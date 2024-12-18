@@ -1,6 +1,6 @@
 # ML_Final_Project
 
-Authors: Kenneth Elsman, Maria, Trevor, Josep
+Authors: Kenneth Elsman, Maria, Trevor, Joseph
 
 Final project for Machine Learning class. Language detection model using Adaboost combined with the ID3 algorithm.
 

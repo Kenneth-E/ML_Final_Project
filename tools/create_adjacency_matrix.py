@@ -84,9 +84,9 @@ def main():
 
     NUM_FILES = 18
     INPUT_SENTENCES_FILENAMES = [
-        r"../data/utteranceskeyboard_mash_sentences.txt",
-        r"../data/utteranceskeyboard_mash_sentences_dvorak_simulated.txt",
-        r"../data/utterancesrandom_sentences.txt",
+        r"../data/utterances/keyboard_mash_sentences.txt",
+        r"../data/utterances/keyboard_mash_sentences_dvorak_simulated.txt",
+        r"../data/utterances/random_sentences.txt",
         r"../data/raw/books/de_AusDerChronikaEinesFahrendenSchlers.txt",
         r"../data/raw/Bible_texts/ACV.txt",
         r"../data/raw/Bible_texts/CebPinadayag.txt",
