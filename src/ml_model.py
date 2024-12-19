@@ -105,7 +105,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         print(train_X)
         print("--------")
 
-        print("fitting data...")
+        print(f"fitting data... (trial {trial_num}/{num_trials})")
         clf = clf.fit(train_X, train_y)
 
         test_X = X[test_id_slice]
@@ -155,12 +155,19 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         print("--------")
 
         if not use_adaboost:
-            uniques = None # TODO: remove
+            classes_ids_in_y = set(train_y)
+            uniques_subset = [uniques[int(i)] for i in classes_ids_in_y]
+            print("uniques_subset:")
+            print(uniques_subset)
+            print(f"length of uniques_subset: {len(uniques_subset)}")
+            print("--------")
+
+            print(f"plotting decision tree... (trial {trial_num}/{num_trials})")
             tree.plot_tree(clf)
             plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".svg")
             plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".png")
 
-            tree.plot_tree(clf, class_names=uniques, feature_names=X_columns)
+            tree.plot_tree(clf, class_names=uniques_subset, feature_names=X_columns)
             plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_num) + r".svg")
             plt.savefig(r"../data/tree_diagrams/tree_" + str(trial_num) + r".png")
 
@@ -169,8 +176,9 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
                 file.write(tree_as_text)
 
             with open(r"../data/tree_diagrams/tree_" + str(trial_num) + r".txt", "w", encoding="utf8") as file:
-                tree_as_text = tree.export_text(clf, class_names=uniques, feature_names=X_columns, max_depth=100, show_weights=True)
+                tree_as_text = tree.export_text(clf, class_names=uniques_subset, feature_names=X_columns, max_depth=100, show_weights=True)
                 file.write(tree_as_text)
+            print("finish plotting decision tree")
 
         pickle_filename = r"../data/tree_diagrams/tree_" + str(trial_num) + r".pickle"
         with open(pickle_filename, 'wb') as pickle_file:
