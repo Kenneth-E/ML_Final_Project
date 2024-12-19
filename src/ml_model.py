@@ -10,6 +10,7 @@ import os
 import pickle
 import time
 import json
+import copy
 
 def get_object_size_gib(obj, decimal_places=2):
     bytes = sys.getsizeof(obj)
@@ -199,15 +200,84 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         json.dump(ret_val, file)
     return ret_val
 
+"""
+    Vary along each index in order
+    theme_and_variation(
+        [0, "string", 42],
+        [
+            [1, 2, 3],
+            ["string2", "string3"]
+            []
+        ]
+    ) = [
+        [0, 'string', 42],
+        [1, 'string', 42],
+        [2, 'string', 42],
+        [3, 'string', 42]
+        [0, 'string2', 42],
+        [0, 'string3', 42]
+    ]
+"""
+def theme_and_variation(theme, variation_list):
+    all_scenarios = [theme]
+    for variation_index, single_variation_data in enumerate(variation_list):
+        for variation in single_variation_data:
+            new_theme_variation = copy.deepcopy(theme)
+            new_theme_variation[variation_index] = variation
+            all_scenarios.append(new_theme_variation)
+    return all_scenarios
 
 def main():
-    TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
-    TRAIN_IDS = [slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000), slice(1_000, 10_000)]
-    MAX_DEPTH = [5, 10, 20, 40, None, 2] # None = unlimited depth
-    USE_ADABOOST = [False, False, False, False, False, True]
-    ADABOOST_NUM_ESTIMATORS = [None, None, None, None, None, 100]
-    ADABOOST_LEARNING_RATE = [None, None, None, None, None, 1.0]
-    NUM_TRIALS = 6
+    id3_theme = [
+        slice(0, 1_000),
+        slice(1_000, 10_000),
+        20,
+        False,
+        None,
+        None,
+    ]
+    variation_list = [
+        [],
+        [slice(1_000, 1_500), slice(1_000, 2_000), slice(1_000, 3_000), slice(1_000, 6_000), slice(1_000, 10_000)],
+        [5, 10, 20, 40, None],
+    ]
+    id3 = theme_and_variation(id3_theme, variation_list)
+    adaboost_theme = [
+        slice(0, 1_000),
+        slice(1_000, 10_000),
+        20,
+        True,
+        100,
+        1.0,
+    ]
+    variation_list = [
+        [],
+        [slice(1_000, 1_500), slice(1_000, 2_000), slice(1_000, 3_000), slice(1_000, 6_000), slice(1_000, 10_000)],
+        [5, 10, 20, 40, None],
+        [],
+        [25, 50, 100, 200, 400],
+        [0.25, 0.5, 1.0, 2.0, 4.0]
+    ]
+    adaboost = theme_and_variation(adaboost_theme, variation_list)
+
+    id3_or_adaboost = id3 + adaboost
+
+    TEST_IDS = list()
+    TRAIN_IDS = list()
+    MAX_DEPTH = list()
+    USE_ADABOOST = list()
+    ADABOOST_NUM_ESTIMATORS = list()
+    ADABOOST_LEARNING_RATE = list()
+
+    for config in id3_or_adaboost:
+        TEST_IDS.append(config[0])
+        TRAIN_IDS.append(config[1])
+        MAX_DEPTH.append(config[2])
+        USE_ADABOOST.append(config[3])
+        ADABOOST_NUM_ESTIMATORS.append(config[4])
+        ADABOOST_LEARNING_RATE.append(config[5])
+
+    NUM_TRIALS = len(id3_or_adaboost)
     COMBINED_FEATURES_FILENAME = '../data/combined_features/combined_features.csv'
     RETURN_VALUE_SAVE_FILENAME = '../data/tree_diagrams/10k.json'
 
