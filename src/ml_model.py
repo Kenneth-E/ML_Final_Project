@@ -177,18 +177,22 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         #     data = pickle.load(f)
         end_time = time.time()
         execution_seconds = end_time - start_time
-
         ret_val_row = {
-            "trial_num": str(trial_num),
-            "test_X": str(test_X),
-            "test_y": str(test_y),
-            "train_matching_elements": str(train_matching_elements),
-            "train_total_elements": str(train_total_elements),
-            "train_accuracy": str(train_accuracy),
-            "test_matching_elements": str(test_matching_elements),
-            "test_total_elements": str(test_total_elements),
-            "test_accuracy": str(test_accuracy),
-            "execution_seconds": str(execution_seconds),
+            "trial_num": trial_num,
+            "max_depth": max_depth,
+            # "test_X": str(test_X),
+            # "test_y": str(test_y),
+            # "train_matching_elements": str(train_matching_elements),
+            # "train_total_elements": str(train_total_elements),
+            "train_accuracy": train_accuracy,
+            # "test_matching_elements": str(test_matching_elements),
+            # "test_total_elements": str(test_total_elements),
+            "test_accuracy": test_accuracy,
+            # "execution_seconds": str(execution_seconds),
+            "use_adaboost": use_adaboost,
+            "adaboost_num_estimators": adaboost_num_estimators,
+            "adaboost_learning_rate": adaboost_learning_rate,
+            "execution_seconds": execution_seconds,
         }
         ret_val.append(ret_val_row)
     with open(return_value_save_filename, "w", encoding="utf-8") as file:
@@ -209,7 +213,7 @@ def main():
 
     ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME, RETURN_VALUE_SAVE_FILENAME)
     print(f"ret_val: {ret_val}")
-    plot_results(ret_val=ret_val, MAX_DEPTH=MAX_DEPTH)
+    plot_results(ret_val=ret_val)
 
 def main_subset():
     TEST_IDS = [slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000), slice(0, 1_000)]
@@ -223,47 +227,17 @@ def main_subset():
 
     ret_val = ml_model(NUM_TRIALS, TEST_IDS, TRAIN_IDS, MAX_DEPTH, USE_ADABOOST, ADABOOST_NUM_ESTIMATORS, ADABOOST_LEARNING_RATE, COMBINED_FEATURES_FILENAME)
     print(f"ret_val: {ret_val}")
-    plot_results(ret_val=ret_val, MAX_DEPTH=MAX_DEPTH)
+    plot_results(ret_val=ret_val)
 
-def plot_results(ret_val, MAX_DEPTH):
+def plot_results(ret_val):
 
     # Test accuracy vs. maximum depth
 
-    plt.figure(figsize=(8, 5))
-    for i, trial in enumerate(ret_val):
-        plt.plot([MAX_DEPTH[i]] * len(trial["test_accuracy"]), trial["test_accuracy"], 
-             label=f"Trial {i+1}", marker="o")
-    plt.xlabel("Max Depth")
-    plt.ylabel("Test Accuracy")
-    plt.title("Test Accuracy vs. Maximum Depth")
-    plt.legend()
-    plt.grid()
-    plt.show()
+    df = pd.DataFrame(ret_val)
 
-    folder_path = "../data/matplot_graphs/"
-    file_name = "depth_vs_test_accuracy.png"
-    plt.savefig(folder_path + file_name)
+    print(df.to_markdown(index=False))
 
-    # Training vs. test accuracy
-
-    x = np.arange(len(ret_val))
-    width = 0.35
-    plt.figure(figsize=(8, 5))
-    # Iterate through trials and plot train/test accuracy
-    for i, trial in enumerate(ret_val):
-        plt.bar(x[i] - width/2, trial["train_accuracy"], width, label=f"Trial {i+1} Train Accuracy")
-        plt.bar(x[i] + width/2, trial["test_accuracy"], width, label=f"Trial {i+1} Test Accuracy")
-    plt.xlabel("Trial")
-    plt.ylabel("Accuracy")
-    plt.title("Training vs. Test Accuracy")
-    plt.xticks(x, [f"Trial {i+1}" for i in range(len(ret_val))])
-    plt.legend()
-    plt.grid(axis="y")
-    plt.show()
-
-    folder_path = "../data/matplot_graphs/"
-    file_name = "taining_vs_test_accuracy.png"
-    plt.savefig(folder_path + file_name)
+    df.to_csv("../data/results/results_table.csv", index=False)
 
 if __name__ == "__main__":
     main()

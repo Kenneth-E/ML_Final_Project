@@ -194,7 +194,7 @@ def get_sample_text_from_books(lang: str = "", sample_len: int = 0):
 
     return sample.upper(), lang
 
-def process_sample_length(sample_len, samples_count=10000):
+def process_sample_length(sample_len, samples_count=500):
     accuracy = 0
     langs_checked = {}
 
