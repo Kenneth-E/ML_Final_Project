@@ -54,6 +54,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
     codes, uniques = pd.factorize(labels)
     print("uniques:")
     print(uniques)
+    print(f"length of uniques: {len(uniques)}")
     print("--------")
 
     ret_val = []
@@ -154,6 +155,7 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
         print("--------")
 
         if not use_adaboost:
+            uniques = None # TODO: remove
             tree.plot_tree(clf)
             plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".svg")
             plt.savefig(r"../data/tree_diagrams/tree_raw_" + str(trial_num) + r".png")
