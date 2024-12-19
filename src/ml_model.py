@@ -290,7 +290,6 @@ def main():
     adaboost = theme_and_variation(adaboost_theme, variation_list)
 
     id3_or_adaboost = id3 + adaboost
-    id3_or_adaboost = id3 # TODO: remove
 
     TEST_IDS = list()
     TRAIN_IDS = list()
