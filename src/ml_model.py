@@ -161,8 +161,8 @@ def trial(trial_idx, params):
         with open(pickle_filename, 'wb') as pickle_file:
             pickle.dump(clf, pickle_file)
         # to load:
-        with open(pickle_filename, 'rb') as f:
-            data = pickle.load(f)
+        # with open(pickle_filename, 'rb') as f:
+        #     data = pickle.load(f)
         end_time = time.time()
         execution_seconds = end_time - start_time
         ret_val_row = {
@@ -172,6 +172,7 @@ def trial(trial_idx, params):
             # "test_y": str(test_y),
             # "train_matching_elements": str(train_matching_elements),
             # "train_total_elements": str(train_total_elements),
+            "training_data_size": train_id_slice.stop - train_id_slice.start,
             "train_accuracy": train_accuracy,
             # "test_matching_elements": str(test_matching_elements),
             # "test_total_elements": str(test_total_elements),
@@ -191,26 +192,26 @@ def ml_model(num_trials, test_ids, train_ids, max_depth_list, use_adaboost_list,
     dtypes["ID"] = int
     dtypes["label"] = str
     dataset = pd.read_csv(combined_features_filename, index_col=0, parse_dates=True, dtype=dtypes)
-    print("dataset:")
-    print(dataset)
+    # print("dataset:")
+    # print(dataset)
     print(f"size in RAM: {get_object_size_gib(dataset)} GiB")
-    print("--------")
+    # print("--------")
 
-    print("dataset dtypes:")
-    print(dataset.dtypes)
-    print("--------")
+    # print("dataset dtypes:")
+    # print(dataset.dtypes)
+    # print("--------")
 
     columns = dataset.columns.tolist()
-    print("columns:")
-    print(columns)
-    print("--------")
+    # print("columns:")
+    # print(columns)
+    # print("--------")
 
     labels = dataset["label"]
     codes, uniques = pd.factorize(labels)
-    print("uniques:")
-    print(uniques)
-    print(f"length of uniques: {len(uniques)}")
-    print("--------")
+    # print("uniques:")
+    # print(uniques)
+    # print(f"length of uniques: {len(uniques)}")
+    # print("--------")
 
     params = (dataset, uniques, codes, train_ids, test_ids, max_depth_list, 
               use_adaboost_list, adaboost_num_estimators_list, 

@@ -13,6 +13,18 @@ Install all required python libraries:
 - tkinter
 - matplotlib
 - tqdm
+- pickle
+- regex
+
+Navigate to src/run_me.ipynb
+
+Run each cell in sequential order. Note that cells may take up to 30 minutes to run.
+
+Note that 32 GB of RAM is necessary to run the first cell.
+
+The second cell should take approximately 30 minutes.
+
+The third cell should take approximately 5 minutes.
 
 # Bible texts languages:
 
