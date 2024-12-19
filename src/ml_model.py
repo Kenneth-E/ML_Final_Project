@@ -255,7 +255,7 @@ def main():
     adaboost_theme = [
         slice(0, 1_000),
         slice(1_000, 10_000),
-        20,
+        1,
         True,
         100,
         1.0,
@@ -263,7 +263,7 @@ def main():
     variation_list = [
         [],
         [slice(1_000, 1_500), slice(1_000, 2_000), slice(1_000, 3_000), slice(1_000, 6_000), slice(1_000, 10_000)],
-        [5, 10, 20, 40, None],
+        [1, 2, 3],
         [],
         [25, 50, 100, 200, 400],
         [0.25, 0.5, 1.0, 2.0, 4.0]
@@ -271,6 +271,7 @@ def main():
     adaboost = theme_and_variation(adaboost_theme, variation_list)
 
     id3_or_adaboost = id3 + adaboost
+    id3_or_adaboost = adaboost # TODO: remove
 
     TEST_IDS = list()
     TRAIN_IDS = list()
